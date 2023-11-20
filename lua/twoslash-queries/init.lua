@@ -154,7 +154,7 @@ M.attach = function(client, buffer_nr)
 	vim.api.nvim_create_autocmd({
 		"BufWinEnter",
 		"TabEnter",
-		"InsertLeave",
+		"TextChangedI",
 		"TextChanged",
 	}, {
 		buffer = buffer_nr,
