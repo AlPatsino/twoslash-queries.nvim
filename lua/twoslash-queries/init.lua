@@ -62,12 +62,20 @@ local get_response_limit_indexes = function(lines)
 	return { 1, #lines }
 end
 
+local normalize_surrounding_spaces = function(s)
+	return(s:gsub("^%s*(.-)%s*$", " %1 "))
+end
+
 local format_virtual_text = function(text)
 	local converted = vim.lsp.util.convert_input_to_markdown_lines(text, {})
 	local limits = get_response_limit_indexes(converted)
 	if M.config.multi_line == true then
 		local selected_lines = vim.list_slice(converted, limits[1], limits[2])
 		return selected_lines
+	else
+		for i, str in ipairs(converted) do
+			converted[i] = normalize_surrounding_spaces(str)
+		end
 	end
 	local joined_string = table.concat(converted, "", limits[1], limits[2])
 	local escaped = string.gsub(joined_string, "  ", " ")
